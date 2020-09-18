@@ -31,3 +31,8 @@
 .inputMargin {
   margin-top: 8px;
 }
+
+.errorMessage {
+  margin-top: 8px;
+  color: red
+}

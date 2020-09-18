@@ -1,19 +1,39 @@
-import React from 'react'
-import { FiPower, FiTrash2 } from 'react-icons/fi';
-import { Link, useHistory } from 'react-router-dom';
+import React from "react"
+import { FiPower, FiTrash2 } from "react-icons/fi";
+import { Link, useHistory } from "react-router-dom";
 
-import logoImg from '../../assets/logo.svg'
-import './styles.css'
+import { useUserLogin } from "../../context/User"
+
+import logoImg from "../../assets/logo.svg"
+import "./styles.css"
 
 export default function Anotation() {
-  return (
-    <div className='profile-container'>
-      <header>
-        <img src={logoImg} alt='logo img' />
-        <span>Olá, Alguem</span>
+  const { formLogin, setFormLogin } = useUserLogin();
+  const history = useHistory();
 
-        <Link className="button" to='/new/anotation' >Nova anotação</Link>
-        <button type="button">
+  const handleLogout = () => {
+    localStorage.removeItem("_auth")
+    history.push("/")
+    cleanFields()
+  }
+
+  const cleanFields = () => {
+    setFormLogin({
+      id: "",
+      name: "",
+      email: "",
+      password: "",
+      loginError: ""
+    })
+  }
+  return (
+    <div className="profile-container">
+      <header>
+        <img src={logoImg} alt="logo img" />
+        <span>Olá, {formLogin.name}</span>
+
+        <Link className="button" to="/new/anotation" >Nova anotação</Link>
+        <button type="button" onClick={handleLogout}>
           <FiPower size={18} color="#F2C94C" />
         </button>
       </header>

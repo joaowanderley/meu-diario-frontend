@@ -27,7 +27,7 @@ export default function Login() {
     event.preventDefault();
     setLoading(true)
     try {
-      const request = await api.signIn({ email, password })
+      const request = await api.post("auth", { email, password })
       localStorage.setItem("_auth", JSON.stringify(request.data.access_token))
       setFormLogin({
         ...formLogin,
@@ -53,6 +53,16 @@ export default function Login() {
     setFormLogin({
       ...formLogin,
       loginError: message ? message : defaultMessage
+    })
+  }
+
+  const cleanFields = () => {
+    setFormLogin({
+      id: "",
+      name: "",
+      email: "",
+      password: "",
+      loginError: ""
     })
   }
 
@@ -93,7 +103,7 @@ export default function Login() {
             }
           </button>
 
-          <Link className="back-link" to="/register">
+          <Link className="back-link" onClick={cleanFields} to="/register">
             <FiLogIn size={16} color="#F2C94C" />
             Não tenho cadastro
           </Link>

@@ -1,11 +1,40 @@
-import React from "react"
-import { Link } from "react-router-dom"
+import React, { useState } from "react"
+import { Link, useHistory } from "react-router-dom"
 import { FiArrowLeft } from "react-icons/fi"
 
 import logoImg from "../../assets/logo.svg"
 import "./styles.css"
 
-export default function index() {
+import { useUserLogin } from "../../context/User"
+import api from '../../http/api'
+
+export default function NewAnotation() {
+  const [text, setText] = useState("");
+  const { formLogin, } = useUserLogin();
+  const history = useHistory();
+
+  async function newAnotation(event) {
+    event.preventDefault();
+
+    const data = {
+      text
+    }
+
+    const token = JSON.parse(localStorage.getItem("_auth"))
+
+    try {
+      await api.post("anotation", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          user_id: formLogin.id
+        }
+      })
+      setText("")
+      history.push("/anotations")
+    } catch (error) {
+      alert("Desculpa, algo deu errado :/")
+    }
+  }
   return (
     <div className="new-incident-container">
       <div className="content">
@@ -21,8 +50,10 @@ export default function index() {
           </Link>
         </section>
 
-        <form>
+        <form onSubmit={newAnotation}>
           <textarea
+            value={text}
+            onChange={e => setText(e.target.value)}
             placeholder="Querido diário..."
           />
 

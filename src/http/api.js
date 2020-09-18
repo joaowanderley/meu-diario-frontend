@@ -1,7 +1,7 @@
-import server from "./server"
+import axios from "axios"
 
-const api = {
-  signIn: (values) => server.post("/auth", values)
-};
+const server = axios.create({
+  baseURL: "https://meudiario.herokuapp.com"
+})
 
-export default api;
+export default server;
